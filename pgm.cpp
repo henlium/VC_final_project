@@ -32,7 +32,7 @@ unique_ptr<uint8_t[]> ReadNetpbm(int &width, int &height, int &num_channel, bool
 	FAIL_IF(fscanf(fp, "%d %d\n%d\n", &width, &height, &norm) != 3);
 	FAIL_IF(norm != 255);
 	
-	int nbytes = width*height*num_channel;
+	size_t nbytes = width*height*num_channel;
 	i.reset(new uint8_t[nbytes]);
 	FAIL_IF(fread(i.get(), 1, nbytes, fp) != nbytes);
 
