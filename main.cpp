@@ -20,13 +20,20 @@ int period;
 int width, height, colors;
 std::string list_path;
 std::string input_dir("data/");
-std::string output_dir("results/");
+std::string output_dir("LR/");
 
+void parse_args(int argc, char **argv);
 void DownSampleProcess();
 
 int main(int argc, char **argv)
 {
-	/* Initialization */
+	parse_args(argc, argv);
+
+	DownSampleProcess();
+
+}
+
+void parse_args(int argc, char **argv) {
 	if (argc != 6) {
 		printf("Usage: %s <width> <height> <frame_list> <period> <output_dir>\n", argv[0]);
 		abort();
@@ -36,9 +43,6 @@ int main(int argc, char **argv)
 	width = atoi(argv[1]);
 	height = atoi(argv[2]);
 	period = atoi(argv[4]);
-
-	DownSampleProcess();
-
 }
 
 void DownSampleProcess()
