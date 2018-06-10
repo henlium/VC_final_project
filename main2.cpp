@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstring>
 #include <vector>
+#include <string>
 #include "pgm.h"
 #include "encoder.h"
 #include "decoder.h"

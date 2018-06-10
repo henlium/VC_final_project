@@ -6,6 +6,7 @@
 #include <vector>
 #include "pgm.h"
 #include "encoder.h"
+#include <string>
 using namespace std;
 
 #define CHECK {\
