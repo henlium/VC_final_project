@@ -127,6 +127,7 @@ void decode()
         puts("Something wrong with reading the input image files.");
         abort();
       }
+      copy(curFrame.get(), curFrame.get()+SIZE/4, cur_float);
 
       SR(last_float, last_float_L, last_float_H, next_float, next_float_L, next_float_H, cur_float, output, width, height);
       transform(output, output+SIZE, o.get(), [](float f) -> uint8_t { return max(min(int(f+0.5f), 255), 0); });
