@@ -129,6 +129,7 @@ void decode()
 
       SR(last_float, last_float_L, last_float_H, next_float, next_float_L, next_float_H, cur_float, output, width, height);
       transform(output, output+SIZE, o.get(), [](float f) -> uint8_t { return max(min(int(f+0.5f), 255), 0); });
+      filepath = output_dir + filename[i];
       WritePGM(o.get(), width, height, filepath.c_str());
     }
 

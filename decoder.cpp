@@ -33,7 +33,7 @@ void SR(
           weighted_F += lastBigFrame_H[j*width+j];
         }
       }
-      output[y*width+x] = weighted_F/w_sum;
+      output[y*width+x] = weighted_F/w_sum + curFrame_L[y*width+x];
     }
   }
 }
@@ -148,7 +148,6 @@ float patch_diff(
   int target_x, target_y;
   int target_i, target_j;
   for (int l = -patch_radius; l <= patch_radius; l++) { // for each height
-    fprintf(stderr, "QQfor\n");
     for (int k = -patch_radius; k <= patch_radius; k++) { // for each weight
       if (k < 0) {
         if (i + k < 0) target_i = -k - i;
@@ -178,7 +177,6 @@ float patch_diff(
       patch_cur[patch_radius+l][patch_radius+k] = curFrame_L[target_y*width+target_x];
     }
   }
-  fprintf(stderr, "QQans\n");
   float ans = 0;
   for (int l = 0; l < PATCH_SIZE; l++) {
     for (int k = 0; k < PATCH_SIZE; k++) {
