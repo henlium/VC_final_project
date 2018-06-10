@@ -28,7 +28,7 @@ void SR(
         if (j<0 or j>=height) continue;
         for (int i = x-4; i <= x+4; i++) {
           if (i<0 or i>=width) continue;
-          float w = expf(-1 * patch_diff(lastBigFrame_L, curFrame_L, x, y, i, j, width, height) / (2*sigma*sigma));
+          float w = expf(-1.0f * patch_diff(lastBigFrame_L, curFrame_L, x, y, i, j, width, height) / (2*sigma*sigma));
           w_sum += w;
           weighted_F += w * lastBigFrame_H[j*width+i];
         }
