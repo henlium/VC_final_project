@@ -1,7 +1,10 @@
 #include <cmath>
+#include <climits>
 #include <cstdlib>
 #include "decoder.h"
 #include "encoder.h"
+
+#define PATCH_SIZE 5
 
 void SR(
   const float *lastBigFrame,
@@ -23,7 +26,7 @@ void SR(
         if (j<0 or j>=height) continue;
         for (int i = x-4; i <= x+4; i++) {
           if (i<0 or i>=width) continue;
-          float w = expf(-1 * patch_diff(lastBigFrame_L, curFrame_L, x, y, i, j, width, height)/ (2*sigma*sigma));
+          float w = expf(-1 * patch_diff(lastBigFrame_L, curFrame_L, x, y, i, j, width, height) / (2*sigma*sigma));
           w_sum += w;
           weighted_F += lastBigFrame_H[j*width+j];
         }
@@ -31,6 +34,26 @@ void SR(
       output[y*width+x] = weighted_F/w_sum;
     }
   }
+}
+
+float decayFactor(
+  const float *bigFrame_L,
+  const float *curFrame_L,
+  const int windowSize,
+  const int x, const int y,
+  const int width, const int height
+) {
+  int n = windowSize/2;
+  float min = __FLT_MAX__;
+  for (int i = y-n; i <= y+n; i++) {
+    for (int j = x-n; j <= x+n; j++) {
+      float E = patch_diff(bigFrame_L, curFrame_L, x, y, i, j, width, height);
+      if (E < min) {
+        min = E;
+      }
+    }
+  }
+  return sqrtf(min/4);
 }
 
 void interpolate(
@@ -105,4 +128,59 @@ void interpolate(
       }
     }
   }
+}
+
+int search_target()
+
+float patch_diff(
+  const float *bigFrame_L, 
+  const float *curFrame_L, 
+  const int x, const int y,
+  const int i, const int j,
+  const int width, const int height
+) {
+  int patch_radius = PATCH_SIZE >> 1;
+  float patch_big[PATCH_SIZE][PATCH_SIZE];
+  float patch_cur[PATCH_SIZE][PATCH_SIZE];
+  patch_big[patch_radius][patch_radius] = bigFrame_L[j*width+i];
+  patch_cur[patch_radius][patch_radius] = curFrame_L[y*width+x];
+  int target_x, target_y;
+  int target_i, target_j;
+  for (int l = -patch_radius; k <= patch_radius; k++) { // for each height
+    for (int k = -patch_radius; l <= patch_radius; l++) { // for each weight
+      if (k < 0) {
+        if (i + k < 0) target_i = -k - i;
+        else target_i = i + k;
+        if (x + k < 0) target_x = -k - x;
+        else target_x = x + k;
+      }
+      else {
+        if (i + k >= width) target_i = 2 * width - i - k - 1;
+        else target_i = i + k;
+        if (x + k >= width) target_x = 2 * width - x - k - 1;
+        else target_x = x + k;
+      }
+      if (l < 0) {
+        if (j + l < 0) target_j = -l - j;
+        else target_j = j + l;
+        if (y + l < 0) target_y = -l - y;
+        else target_y = y + l;
+      }
+      else {
+        if (j + l >= height) target_j = 2 * height - j - l - 1;
+        else target_j = j + k;
+        if (y + l >= height) target_y = 2 * height - y - l - 1;
+        else target_y = y + k;
+      }
+      patch_big[patch_radius+l][patch_radius+k] = bigFrame_L[target_j*width+target_i];
+      patch_cur[patch_radius+l][patch_radius+k] = curFrame_L[target_y*width+target_x];
+    }
+  }
+  float ans = 0;
+  for (int l = 0; l < PATCH_SIZE; l++) {
+    for (int k = 0; k < PATCH_SIZE; k++) {
+      ans += patch_cur[l][k] * patch_cur[l][k] - patch_big[l][k] * patch_big[l][k];
+    }
+  }
+  return ans;
 }
