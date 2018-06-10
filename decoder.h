@@ -26,7 +26,6 @@ int windowSize(
 float decayFactor(
   const float *bigFrame_L,
   const float *curFrame_L,
-  const float *E,
   const int windowSize,
   const int x, const int y,
   const int width, const int height
@@ -34,7 +33,7 @@ float decayFactor(
 
 float patch_diff(
   const float *bigFrame_L,
-  const float *curFrame,
+  const float *curFrame_L,
   const int x, const int y,
   const int i, const int j,
   const int width, const int height

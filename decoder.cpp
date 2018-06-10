@@ -1,3 +1,5 @@
+#include <cmath>
+#include <cstdlib>
 #include "decoder.h"
 #include "encoder.h"
 
@@ -12,7 +14,23 @@ void SR(
   float *output,
   const int width, const int height
 ) {
-
+  float *curFrame_L = (float*)malloc(sizeof(float)*width*height);
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      float w_sum = 0.0f, weighted_F = 0.0f;
+      float sigma = decayFactor(lastBigFrame_L, curFrame_L, 9, x, y, width, height);
+      for (int j = y-4; j <= y+4; j++) {
+        if (j<0 or j>=height) continue;
+        for (int i = x-4; i <= x+4; i++) {
+          if (i<0 or i>=width) continue;
+          float w = expf(-1 * patch_diff(lastBigFrame_L, curFrame_L, x, y, i, j, width, height)/ (2*sigma*sigma));
+          w_sum += w;
+          weighted_F += lastBigFrame_H[j*width+j];
+        }
+      }
+      output[y*width+x] = weighted_F/w_sum;
+    }
+  }
 }
 
 void interpolate(
