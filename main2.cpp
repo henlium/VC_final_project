@@ -135,7 +135,7 @@ void decode()
       WritePGM(o.get(), width, height, filepath.c_str());
     }
 
-    filepath = output_dir + filename[prd_len];
+    filepath = output_dir + filename[prd_len-1];
     WritePGM(nextBigFrame.get(), width, height, filepath.c_str());
 
     copy(next_float, next_float+SIZE, last_float);
