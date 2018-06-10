@@ -29,3 +29,11 @@ float decayFactor(
   const int x, const int y,
   const int width, const int height
 );
+
+float patch_diff(
+  const float *lastBigFrame_L,
+  const float *curFrame,
+  const int x, const int y,
+  const int i, const int j,
+  const int width, const int height
+);
