@@ -5,7 +5,7 @@ ENCODER = encoder.out
 DECODER = decoder.out
 
 SRC_EN = main.cpp encoder.cpp
-SRC_DE = main2.cpp decoder.cpp
+SRC_DE = main2.cpp decoder.cpp encoder.cpp
 SRC_PGM = pgm.cpp
 
 OBJ_EN = $(SRC_EN:.cpp=.o)
