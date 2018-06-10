@@ -49,7 +49,7 @@ float decayFactor(
   float min = __FLT_MAX__;
   for (int i = y-n; i <= y+n; i++) {
     for (int j = x-n; j <= x+n; j++) {
-      float E = patch_diff(bigFrame_L, curFrame_L, x, y, i, j, width, height);
+      float E = patch_diff(bigFrame_L, curFrame_L, x, y, j, i, width, height);
       if (E < min) {
         min = E;
       }
