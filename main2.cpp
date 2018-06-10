@@ -77,6 +77,7 @@ void decode()
 			abort();
 	}
 	copy(lastBigFrame.get(), lastBigFrame.get()+SIZE, last_float);
+
 	while (true) {
 		for (prd_len = 0; prd_len < period; prd_len++) {
 			if (fgets(filename[prd_len+1], 127, f_list) == NULL) {
@@ -86,9 +87,11 @@ void decode()
 			}
 			filename[prd_len][strlen(filename[prd_len])-1] = 0;
 		}
+		if (prd_len == 1) break;
 
 		filepath = input_dir + filename[prd_len];
 		nextBigFrame = ReadNetpbm(width, height, colors, suc, filepath.c_str());
+		copy(nextBigFrame.get(), nextBigFrame.get()+SIZE, next_float);
 		
 
 		for (int i = 1; i < prd_len; i++) {
@@ -106,6 +109,8 @@ void decode()
 
 		filepath = output_dir + filename[prd_len];
 		WritePGM(nextBigFrame.get(), width, height, filepath.c_str());
+
+		copy(next_float, next_float+SIZE, last_float);
 	}
 	
 	fclose(f_list);
