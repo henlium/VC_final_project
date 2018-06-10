@@ -102,7 +102,7 @@ void decode()
     if (prd_len == 0) break;
 
     /* Read next HR frame */
-    filepath = input_dir + filename[prd_len];
+    filepath = input_dir + filename[prd_len-1];
     nextBigFrame = ReadNetpbm(width, height, colors, suc, filepath.c_str());
     if (not (suc)) {
       puts("Something wrong with reading the input image files.");

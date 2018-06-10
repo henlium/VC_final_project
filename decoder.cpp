@@ -1,5 +1,6 @@
 #include <cmath>
 #include <climits>
+#include <cstdio>
 #include <cstdlib>
 #include "decoder.h"
 #include "encoder.h"
@@ -18,6 +19,7 @@ void SR(
   const int width, const int height
 ) {
   float *curFrame_L = (float*)malloc(sizeof(float)*width*height);
+  interpolate(curFrame, curFrame_L, width, height);
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       float w_sum = 0.0f, weighted_F = 0.0f;
@@ -130,7 +132,6 @@ void interpolate(
   }
 }
 
-int search_target()
 
 float patch_diff(
   const float *bigFrame_L, 
@@ -146,8 +147,9 @@ float patch_diff(
   patch_cur[patch_radius][patch_radius] = curFrame_L[y*width+x];
   int target_x, target_y;
   int target_i, target_j;
-  for (int l = -patch_radius; k <= patch_radius; k++) { // for each height
-    for (int k = -patch_radius; l <= patch_radius; l++) { // for each weight
+  for (int l = -patch_radius; l <= patch_radius; l++) { // for each height
+    fprintf(stderr, "QQfor\n");
+    for (int k = -patch_radius; k <= patch_radius; k++) { // for each weight
       if (k < 0) {
         if (i + k < 0) target_i = -k - i;
         else target_i = i + k;
@@ -176,6 +178,7 @@ float patch_diff(
       patch_cur[patch_radius+l][patch_radius+k] = curFrame_L[target_y*width+target_x];
     }
   }
+  fprintf(stderr, "QQans\n");
   float ans = 0;
   for (int l = 0; l < PATCH_SIZE; l++) {
     for (int k = 0; k < PATCH_SIZE; k++) {
