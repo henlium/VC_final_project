@@ -170,9 +170,9 @@ float patch_diff(
       }
       else {
         if (j + l >= height) target_j = 2 * height - j - l - 1;
-        else target_j = j + k;
+        else target_j = j + l;
         if (y + l >= height) target_y = 2 * height - y - l - 1;
-        else target_y = y + k;
+        else target_y = y + l;
       }
       patch_big[patch_radius+l][patch_radius+k] = bigFrame_L[target_j*width+target_i];
       patch_cur[patch_radius+l][patch_radius+k] = curFrame_L[target_y*width+target_x];
