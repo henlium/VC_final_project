@@ -63,12 +63,12 @@ void decode()
 	float *cur_float = (float*)malloc(sizeof(float)*SIZE/4);
 	float *output = (float*)malloc(sizeof(float)*SIZE);
 
+	/* Read first HR frame */
 	int prd_len;	bool suc;
-	char filename[period+1][128];
-	std::string filepath;
+	char filename[period][128];
 	fgets(filename[0], 127, f_list);
 	filename[0][strlen(filename[0])-1] = 0;
-	filepath = input_dir + filename[0];
+	std::string filepath = input_dir + filename[0];
 	lastBigFrame = ReadNetpbm(width, height, colors, suc, filepath.c_str());
 	filepath = output_dir + filename[0];
 	WritePGM(lastBigFrame.get(), width, height, filepath.c_str());
@@ -80,21 +80,25 @@ void decode()
 
 	while (true) {
 		for (prd_len = 0; prd_len < period; prd_len++) {
-			if (fgets(filename[prd_len+1], 127, f_list) == NULL) {
+			if (fgets(filename[prd_len], 127, f_list) == NULL) {
 				filename[prd_len][strlen(filename[prd_len])-1] = 0;
-				prd_len++;
 				break;
 			}
 			filename[prd_len][strlen(filename[prd_len])-1] = 0;
 		}
-		if (prd_len == 1) break;
+		if (prd_len == 0) break;
 
+		/* Read next HR frame */
 		filepath = input_dir + filename[prd_len];
 		nextBigFrame = ReadNetpbm(width, height, colors, suc, filepath.c_str());
+		if (not (suc)) {
+			puts("Something wrong with reading the input image files.");
+			abort();
+		}
 		copy(nextBigFrame.get(), nextBigFrame.get()+SIZE, next_float);
 		
-
-		for (int i = 1; i < prd_len; i++) {
+		/* Read the LR frames and process them */
+		for (int i = 0; i < prd_len-1; i++) {
 			filepath = input_dir + filename[i];
 			curFrame = ReadNetpbm(width_half, height_half, colors, suc, filepath.c_str());
 			if (not (suc)) {
