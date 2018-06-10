@@ -180,7 +180,7 @@ float patch_diff(
   float ans = 0;
   for (int l = 0; l < PATCH_SIZE; l++) {
     for (int k = 0; k < PATCH_SIZE; k++) {
-      ans += patch_cur[l][k] * patch_cur[l][k] - patch_big[l][k] * patch_big[l][k];
+      ans += (patch_cur[l][k] - patch_big[l][k]) * (patch_cur[l][k] - patch_big[l][k]);
     }
   }
   return ans;
