@@ -24,8 +24,8 @@ int windowSize(
 );
 
 float decayFactor(
-  const float *bigFrame_L,
   const float *E,
+  const int windowSize,
   const int x, const int y,
   const int width, const int height
 );
