@@ -48,6 +48,7 @@ void WriteNetpbm(uint8_t* i, const int width, const int height, const int num_ch
 	FILE *fp = fopen(filename, "wb");
 	fprintf(fp, "%s\n%d %d\n255\n", magic, width, height);
 	fwrite(i, 1, num_element, fp);
+	fflush(fp);
 }
 
 void WritePGM(uint8_t* i, const int width, const int height, const char *filename)
